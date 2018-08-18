@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import api from 'helpers/api';
 import TextInput from 'components/TextInput';
+import RadioGroup from 'components/RadioGroup';
+import RadioOption from 'components/RadioOption';
+import PropTypes from 'prop-types';
 
 class MainPage extends Component {
 	constructor(props) {
@@ -13,12 +16,18 @@ class MainPage extends Component {
 		this.handleUploadImage = this.handleUploadImage.bind(this);
 	}
 
+	static propTypes = {};
+	static state = {
+		templateName: '',
+		selectedValueThing: ''
+	};
+
 	handleUploadImage(e) {
 		e.preventDefault();
 
 		const data = new FormData();
 		data.append('file', this.uploadInput.files[0]);
-		data.append('templateName', this.templateName);
+		data.append('templateName', this.state.templateName);
 
 		api
 			.uploadTemplate(data)
@@ -53,10 +62,27 @@ class MainPage extends Component {
 					<div>
 						<TextInput
 							inputValue={value => {
-								this.templateName = value;
+								this.setState({
+									templateName: value
+								});
 							}}
 							initialValue="Hello!"
 						/>
+
+						<RadioGroup
+							inputValue={value => {
+								this.setState({
+									selectedValueThing: value
+								});
+							}}
+							name="size"
+							onChange={this.handleChange}>
+							<RadioOption value="one">option 1</RadioOption>
+							<RadioOption value="two" selected>
+								option 2
+							</RadioOption>
+							<RadioOption value="three">option 3</RadioOption>
+						</RadioGroup>
 					</div>
 					<br />
 					<div>
@@ -66,6 +92,7 @@ class MainPage extends Component {
 					<hr />
 					<p>Uploaded json:</p>
 					{this.state.newJsonLocation}
+					{this.state.selectedValueThing}
 				</form>
 			</div>
 		);

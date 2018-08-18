@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class TextInput extends Component {
 	constructor(props) {
@@ -6,7 +7,14 @@ class TextInput extends Component {
 		this.defaultValue = props.initialValue ? props.initialValue : '';
 		props.inputValue(this.defaultValue);
 	}
+
+	static propTypes = {
+		initialValue: PropTypes.string,
+		inputValue: PropTypes.func.isRequired
+	};
+
 	state = {};
+
 	handleChange(e) {
 		this.props.inputValue(e.target.value);
 	}
